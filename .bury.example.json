@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "description": "Bury configuration file",
+  "entry_points": {
+    "patterns": [
+      "**/main.py",
+      "**/__main__.py",
+      "**/test_*.py",
+      "**/*_test.py",
+      "src/index.ts",
+      "src/main.ts",
+      "**/*.test.ts",
+      "**/*.spec.ts"
+    ],
+    "functions": [
+      "main",
+      "test_*",
+      "app.*"
+    ],
+    "exports": false
+  },
+  "ignore": [
+    "**/node_modules/**",
+    "**/__pycache__/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.git/**",
+    "**/venv/**",
+    "**/.venv/**"
+  ],
+  "languages": {
+    "python": {
+      "enabled": true,
+      "detect_test_frameworks": true
+    },
+    "typescript": {
+      "enabled": true,
+      "detect_test_frameworks": true
+    }
+  }
+}
