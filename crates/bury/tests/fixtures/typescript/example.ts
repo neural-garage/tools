@@ -20,7 +20,7 @@ class UsedClass {
         // This method is called
         return "I'm alive";
     }
-    
+
     deadMethod(): string {
         // This method is never called - DEAD CODE
         return "I'm dead too";

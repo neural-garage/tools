@@ -2,7 +2,7 @@ use neural_conductor_agent::{Agent, VERSION};
 
 fn main() {
     println!("neural-conductor-agent v{}", VERSION);
-    
+
     let agent = Agent::new();
     println!("Agent ID: {}", agent.info().id);
     println!("Hostname: {}", agent.info().hostname);

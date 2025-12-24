@@ -64,7 +64,7 @@ Bury uses a three-phase reachability analysis:
 class Calculator:
     def add(self, a, b):      # ✅ Used
         return a + b
-    
+
     def multiply(self, a, b):  # ❌ DEAD CODE
         return a * b
 

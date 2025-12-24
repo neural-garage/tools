@@ -10,8 +10,8 @@ pub mod executor;
 pub mod session_manager;
 
 pub use neural_conductor_shared::{
-    AgentInfo, SessionId, TaskStatus,
     protocol::{Request, Response},
+    AgentInfo, SessionId, TaskStatus,
 };
 
 pub use anyhow::{anyhow, Result};
@@ -30,7 +30,7 @@ impl Agent {
             .ok()
             .and_then(|h| h.into_string().ok())
             .unwrap_or_else(|| "unknown".to_string());
-        
+
         Self {
             info: AgentInfo {
                 id: format!("agent-{}", hostname),
@@ -40,7 +40,7 @@ impl Agent {
             },
         }
     }
-    
+
     pub fn info(&self) -> &AgentInfo {
         &self.info
     }

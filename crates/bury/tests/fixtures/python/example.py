@@ -16,7 +16,7 @@ class UsedClass:
     def used_method(self):
         """This method is called"""
         return "I'm alive"
-    
+
     def dead_method(self):
         """This method is never called - DEAD CODE"""
         return "I'm dead too"

@@ -7,9 +7,9 @@
 
 use serde::{Deserialize, Serialize};
 
+pub mod message;
 pub mod protocol;
 pub mod session;
-pub mod message;
 
 pub use anyhow::{anyhow, Result};
 
@@ -32,10 +32,13 @@ pub struct SessionId(pub String);
 impl SessionId {
     pub fn new() -> Self {
         // Simple UUID-like generation for now
-        Self(format!("session-{}", std::time::SystemTime::now()
-            .duration_since(std::time::UNIX_EPOCH)
-            .unwrap()
-            .as_millis()))
+        Self(format!(
+            "session-{}",
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_millis()
+        ))
     }
 }
 

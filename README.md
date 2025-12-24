@@ -119,7 +119,7 @@ Dead Code = Definitions - Reachable
 class Calculator:
     def add(self, a, b):      # ✅ Used
         return a + b
-    
+
     def multiply(self, a, b):  # ❌ DEAD CODE
         return a * b
 

@@ -1,6 +1,6 @@
 //! Complexity analysis module
 
-use neural_shared::{ParsedFile, Symbol};
+use neural_shared::ParsedFile;
 use serde::{Deserialize, Serialize};
 
 /// Complexity analyzer

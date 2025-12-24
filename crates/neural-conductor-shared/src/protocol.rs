@@ -1,14 +1,14 @@
 //! Protocol definitions for Conductor communication
 
-use serde::{Deserialize, Serialize};
 use super::{SessionId, TaskStatus};
+use serde::{Deserialize, Serialize};
 
 /// Request from server to agent
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Request {
     /// Ping to check agent health
     Ping,
-    
+
     /// Execute a command in a session
     ExecuteCommand {
         session_id: SessionId,
@@ -16,32 +16,26 @@ pub enum Request {
         args: Vec<String>,
         workdir: Option<String>,
     },
-    
+
     /// Create a new session
     CreateSession {
         session_id: SessionId,
         workspace_path: String,
     },
-    
+
     /// Terminate a session
-    TerminateSession {
-        session_id: SessionId,
-    },
-    
+    TerminateSession { session_id: SessionId },
+
     /// Get session status
-    GetSessionStatus {
-        session_id: SessionId,
-    },
+    GetSessionStatus { session_id: SessionId },
 }
 
 /// Response from agent to server
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Response {
     /// Pong response
-    Pong {
-        agent_info: super::AgentInfo,
-    },
-    
+    Pong { agent_info: super::AgentInfo },
+
     /// Command execution result
     CommandResult {
         session_id: SessionId,
@@ -49,25 +43,19 @@ pub enum Response {
         stdout: String,
         stderr: String,
     },
-    
+
     /// Session created
-    SessionCreated {
-        session_id: SessionId,
-    },
-    
+    SessionCreated { session_id: SessionId },
+
     /// Session terminated
-    SessionTerminated {
-        session_id: SessionId,
-    },
-    
+    SessionTerminated { session_id: SessionId },
+
     /// Session status
     SessionStatus {
         session_id: SessionId,
         status: TaskStatus,
     },
-    
+
     /// Error response
-    Error {
-        message: String,
-    },
+    Error { message: String },
 }

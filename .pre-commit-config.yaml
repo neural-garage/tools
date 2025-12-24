@@ -62,7 +62,7 @@ repos:
         language: system
         types: [rust]
         pass_filenames: false
-        stages: [commit]
+        stages: [pre-commit]
 
   # Complexity analysis with pmat
   - repo: local

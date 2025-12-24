@@ -1,7 +1,7 @@
 //! Message framing and serialization
 
-use serde::{Deserialize, Serialize};
 use super::Result;
+use serde::{Deserialize, Serialize};
 
 /// Wrapper for protocol messages
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -22,7 +22,7 @@ impl<T: Serialize> Message<T> {
             payload,
         }
     }
-    
+
     /// Serialize to JSON
     pub fn to_json(&self) -> Result<String> {
         Ok(serde_json::to_string(self)?)

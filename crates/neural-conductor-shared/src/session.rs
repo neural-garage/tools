@@ -1,7 +1,7 @@
 //! Session management types
 
-use serde::{Deserialize, Serialize};
 use super::{SessionId, TaskStatus};
+use serde::{Deserialize, Serialize};
 
 /// Session information
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -19,7 +19,7 @@ impl Session {
             .duration_since(std::time::UNIX_EPOCH)
             .unwrap()
             .as_secs();
-        
+
         Self {
             id,
             workspace_path,

@@ -1,0 +1,15 @@
+# Rustfmt configuration for Neural Garage projects
+# Only stable features (no nightly required)
+# See https://rust-lang.github.io/rustfmt for all options
+
+# Edition
+edition = "2021"
+
+# Formatting
+max_width = 100
+hard_tabs = false
+tab_spaces = 4
+
+# Misc
+use_small_heuristics = "Default"
+newline_style = "Unix"

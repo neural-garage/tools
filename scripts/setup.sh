@@ -26,7 +26,7 @@ cargo install pmat 2>/dev/null || echo "⚠️  pmat installation skipped (optio
 if command -v pip &> /dev/null || command -v pip3 &> /dev/null; then
     echo "📦 Installing pre-commit..."
     pip install pre-commit 2>/dev/null || pip3 install pre-commit 2>/dev/null || echo "⚠️  pre-commit installation failed"
-    
+
     if command -v pre-commit &> /dev/null; then
         echo "🪝 Installing pre-commit hooks..."
         pre-commit install

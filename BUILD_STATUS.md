@@ -2,8 +2,8 @@
 
 ## ✅ COMPLETED - MVP is Working!
 
-**Date**: December 23, 2025  
-**Version**: 0.1.0  
+**Date**: December 23, 2025
+**Version**: 0.1.0
 **Status**: 🚀 **MVP FUNCTIONAL**
 
 ---
@@ -13,11 +13,11 @@
 ### Core Functionality ✅
 - ✅ **Python Parser** - Full AST traversal with tree-sitter
   - Function definitions
-  - Class definitions  
+  - Class definitions
   - Method definitions (within classes)
   - Function calls
   - Method calls (attribute access)
-  
+
 - ✅ **TypeScript Parser** - Full AST traversal with tree-sitter
   - Function declarations
   - Arrow functions
@@ -129,8 +129,8 @@ main fd9b37d  feat: implement TypeScript AST traversal
 main e6b805a  feat: implement Python AST traversal (initial commit)
 ```
 
-**Repository**: https://github.com/paolorechia/bury  
-**Commits**: 3  
+**Repository**: https://github.com/paolorechia/bury
+**Commits**: 3
 **Lines of Code**: ~1,900
 
 ---
@@ -157,7 +157,7 @@ main e6b805a  feat: implement Python AST traversal (initial commit)
 
 ## Performance
 
-**Current**: ~0.3s for simple examples  
+**Current**: ~0.3s for simple examples
 **Target**: <5s for 10,000 file codebase
 
 ---

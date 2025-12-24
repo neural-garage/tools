@@ -1,0 +1,14 @@
+# Clippy configuration for Neural Garage projects
+# See https://doc.rust-lang.org/clippy/lint_configuration.html
+
+# Cognitive complexity threshold
+cognitive-complexity-threshold = 30
+
+# Type complexity
+type-complexity-threshold = 250
+
+# Performance
+vec-box-size-threshold = 4096
+
+# Style preferences
+single-char-binding-names-threshold = 4

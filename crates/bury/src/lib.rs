@@ -12,7 +12,7 @@ pub mod analyzer;
 pub mod cli;
 
 // Re-export shared types
-pub use neural_shared::{Language, Parser, ParsedFile, Scanner, Symbol, SymbolKind};
+pub use neural_shared::{Language, ParsedFile, Parser, Scanner, Symbol, SymbolKind};
 
 // Bury-specific exports
 pub use analyzer::{Analyzer, Confidence, DeadCodeFinding};

@@ -72,7 +72,7 @@ cargo clippy
 ### Next Steps (Implementation Roadmap)
 
 #### Phase 1: Core Functionality (Weeks 1-4)
-1. **Python Parser** 
+1. **Python Parser**
    - Implement AST traversal
    - Extract function/class definitions
    - Track function calls and references
