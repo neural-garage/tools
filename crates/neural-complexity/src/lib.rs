@@ -1,11 +1,13 @@
-//! # Complexity - Code Complexity Analyzer
+//! # Neural Complexity - Code Complexity Analyzer
 //!
 //! Analyzes code complexity metrics including cyclomatic and cognitive complexity.
+//!
+//! Part of the Neural Garage toolkit.
 
 pub mod analyzer;
 
 // Re-export shared types
-pub use neural_shared::{Language, Parser, ParsedFile, Reporter, Scanner, Symbol, SymbolKind};
+pub use neural_shared::{Language, Parser, ParsedFile, Scanner, Symbol, SymbolKind};
 
 // Complexity-specific exports
 pub use analyzer::{ComplexityAnalyzer, ComplexityMetrics};

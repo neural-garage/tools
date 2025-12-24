@@ -1,17 +1,20 @@
 [package]
-name = "complexity"
+name = "neural-complexity"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
 repository.workspace = true
-description = "Code complexity analyzer for Python and TypeScript"
+description = "Code complexity analyzer for Python and TypeScript using cyclomatic and cognitive complexity metrics"
 keywords = ["complexity", "analyzer", "cyclomatic", "cognitive", "static-analysis"]
 categories = ["development-tools", "command-line-utilities"]
+readme = "README.md"
+homepage = "https://github.com/neural-garage/tools"
+documentation = "https://docs.rs/neural-complexity"
 
 [dependencies]
 # Internal shared library
-neural-shared = { path = "../shared" }
+neural-shared = { version = "0.1.0", path = "../shared" }
 
 # CLI
 clap = { workspace = true }
@@ -22,9 +25,9 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 
 [lib]
-name = "complexity"
+name = "neural_complexity"
 path = "src/lib.rs"
 
 [[bin]]
-name = "complexity"
+name = "neural-complexity"
 path = "src/main.rs"

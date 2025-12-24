@@ -2,7 +2,7 @@
 members = [
     "crates/shared",
     "crates/bury",
-    "crates/complexity",
+    "crates/neural-complexity",
 ]
 resolver = "2"
 
