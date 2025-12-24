@@ -1,10 +1,13 @@
-# bury
+# bury 🪦
 
 > A blazingly fast dead code detector using reachability analysis
 
 **Bury the dead code before it haunts your codebase!**
 
+Part of the [Neural Garage](https://github.com/neural-garage) toolkit - AI-powered code analysis tools built in Rust.
+
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/License-MIT%20OR%20Apache--2.0-blue.svg)](https://opensource.org/licenses/MIT)
+[![CI](https://github.com/neural-garage/bury/workflows/CI/badge.svg)](https://github.com/neural-garage/bury/actions)
 
 ## What is Bury?
 
@@ -26,7 +29,7 @@ Bury finds unused code in your Python and TypeScript projects by performing **re
 cargo install bury
 
 # From source
-git clone https://github.com/paolorechia/bury
+git clone https://github.com/neural-garage/bury
 cd bury
 cargo install --path .
 ```
@@ -127,22 +130,29 @@ Create a `.bury.json` file:
 
 ## Roadmap
 
-### Phase 1 - MVP (Current)
+### Phase 1 - MVP ✅ Complete
 - [x] Project structure
-- [ ] Python parser implementation
-- [ ] TypeScript parser implementation
-- [ ] Basic reachability analysis
-- [ ] JSON output
-- [ ] CLI commands
+- [x] Python parser implementation
+- [x] TypeScript parser implementation
+- [x] Reachability analysis with entry point detection
+- [x] JSON output
+- [x] CLI commands
+- [x] Call graph-based dead code detection
 
-### Phase 2 - Core Features
+### Phase 2 - Enhanced Features
 - [ ] Configuration file support
-- [ ] Entry point detection
 - [ ] Cross-file analysis
 - [ ] Import/export tracking
-- [ ] Test framework detection
+- [ ] Dynamic code pattern detection
+- [ ] Performance optimization (parallel processing)
 
-### Phase 3 - Premium Features (Separate crate)
+### Phase 3 - Neural Garage Integration
+- [ ] Integration with `neural-complexity` analyzer
+- [ ] LLM context generation
+- [ ] AI-powered refactoring suggestions
+- [ ] Unified `neural` CLI
+
+### Phase 4 - Premium Features (Separate crate)
 - [ ] Additional languages (Java, Go, Rust, C#)
 - [ ] CI/CD integrations
 - [ ] Team dashboards
@@ -206,10 +216,19 @@ Bury was inspired by excellent tools like:
 
 ## Support
 
-- 🐛 [Report bugs](https://github.com/paolorechia/bury/issues)
-- 💡 [Request features](https://github.com/paolorechia/bury/issues)
-- 💬 [Discussions](https://github.com/paolorechia/bury/discussions)
+- 🐛 [Report bugs](https://github.com/neural-garage/bury/issues)
+- 💡 [Request features](https://github.com/neural-garage/bury/issues)
+- 💬 [Discussions](https://github.com/neural-garage/bury/discussions)
+
+## Part of Neural Garage 🧠🔧
+
+Bury is part of the [Neural Garage](https://github.com/neural-garage) toolkit - next-generation developer tools built for the AI era.
+
+**Other Neural Garage tools:**
+- **neural-complexity** *(coming soon)* - AI-powered complexity analysis
+- **neural-context** *(coming soon)* - LLM context generator
+- **neural-inspect** *(coming soon)* - Comprehensive code health diagnostics
 
 ---
 
-**Made with ❤️ by [Paolo Rechia](https://github.com/paolorechia)**
+**Built with ❤️ and 🦀 by [Paolo Rechia](https://github.com/paolorechia) and the Neural Garage community**
