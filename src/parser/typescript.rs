@@ -251,6 +251,78 @@ impl TypeScriptParser {
             _ => String::new(),
         }
     }
+
+    fn extract_entry_points(&self, tree: &Tree, source: &str) -> Vec<String> {
+        let mut entry_points = Vec::new();
+        let root = tree.root_node();
+
+        self.traverse_for_entry_points(root, source, &mut entry_points);
+
+        entry_points
+    }
+
+    fn traverse_for_entry_points(&self, node: Node, source: &str, entry_points: &mut Vec<String>) {
+        let kind = node.kind();
+
+        // Detect top-level call expressions (like main())
+        if kind == "expression_statement" {
+            if let Some(expr) = node.child(0) {
+                if expr.kind() == "call_expression" {
+                    if let Some(func_node) = expr.child_by_field_name("function") {
+                        let name = self.extract_call_name(func_node, source);
+                        if !name.is_empty() {
+                            entry_points.push(name);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Detect exported functions as entry points
+        if kind == "export_statement" {
+            // Find function/class being exported
+            let mut cursor = node.walk();
+            for child in node.children(&mut cursor) {
+                if child.kind() == "function_declaration" || child.kind() == "class_declaration" {
+                    if let Some(name_node) = child.child_by_field_name("name") {
+                        let name = name_node.utf8_text(source.as_bytes()).unwrap_or("");
+                        if !name.is_empty() {
+                            entry_points.push(name.to_string());
+                        }
+                    }
+                }
+            }
+        }
+
+        // Detect test functions (describe, it, test)
+        if kind == "call_expression" {
+            if let Some(func_node) = node.child_by_field_name("function") {
+                let func_name = func_node.utf8_text(source.as_bytes()).unwrap_or("");
+                if func_name == "describe" || func_name == "it" || func_name == "test" {
+                    // Mark this as an entry point - extract the callback function
+                    if let Some(args) = node.child_by_field_name("arguments") {
+                        // The test callback is usually the second argument
+                        let mut cursor = args.walk();
+                        for child in args.children(&mut cursor) {
+                            if child.kind() == "arrow_function" || child.kind() == "function" {
+                                // This is a test entry point - for now, we'll just mark the test function itself
+                                entry_points
+                                    .push(format!("__test_callback_{}", entry_points.len()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Traverse children (but not into function bodies to avoid recursion)
+        if kind != "statement_block" {
+            let mut cursor = node.walk();
+            for child in node.children(&mut cursor) {
+                self.traverse_for_entry_points(child, source, entry_points);
+            }
+        }
+    }
 }
 
 impl Parser for TypeScriptParser {
@@ -268,11 +340,13 @@ impl Parser for TypeScriptParser {
 
         let definitions = self.extract_definitions(&tree, source, &file_path_str);
         let usages = self.extract_usages(&tree, source, &file_path_str);
+        let entry_points = self.extract_entry_points(&tree, source);
 
         Ok(ParsedFile {
             path: file_path_str,
             definitions,
             usages,
+            entry_points,
         })
     }
 }

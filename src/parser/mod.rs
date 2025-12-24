@@ -47,6 +47,7 @@ pub struct ParsedFile {
     pub path: String,
     pub definitions: Vec<Symbol>,
     pub usages: Vec<Symbol>,
+    pub entry_points: Vec<String>,
 }
 
 /// Symbol represents a function, class, method, or variable

@@ -177,6 +177,68 @@ impl PythonParser {
             _ => String::new(),
         }
     }
+
+    fn extract_entry_points(&self, tree: &Tree, source: &str) -> Vec<String> {
+        let mut entry_points = Vec::new();
+        let root = tree.root_node();
+
+        self.traverse_for_entry_points(root, source, &mut entry_points);
+
+        entry_points
+    }
+
+    fn traverse_for_entry_points(&self, node: Node, source: &str, entry_points: &mut Vec<String>) {
+        let kind = node.kind();
+
+        // Detect if __name__ == "__main__" pattern
+        if kind == "if_statement" {
+            if let Some(condition) = node.child_by_field_name("condition") {
+                let condition_text = condition.utf8_text(source.as_bytes()).unwrap_or("");
+                // Look for __name__ == "__main__" or "__main__" == __name__
+                if condition_text.contains("__name__") && condition_text.contains("\"__main__\"") {
+                    // Extract calls in the if block
+                    if let Some(consequence) = node.child_by_field_name("consequence") {
+                        self.extract_calls_from_block(consequence, source, entry_points);
+                    }
+                }
+            }
+        }
+
+        // Also detect functions that start with "test_" as entry points (pytest convention)
+        if kind == "function_definition" {
+            if let Some(name_node) = node.child_by_field_name("name") {
+                let name = name_node.utf8_text(source.as_bytes()).unwrap_or("");
+                if name.starts_with("test_") {
+                    entry_points.push(name.to_string());
+                }
+            }
+        }
+
+        // Traverse children
+        let mut cursor = node.walk();
+        for child in node.children(&mut cursor) {
+            self.traverse_for_entry_points(child, source, entry_points);
+        }
+    }
+
+    fn extract_calls_from_block(&self, node: Node, source: &str, entry_points: &mut Vec<String>) {
+        let kind = node.kind();
+
+        if kind == "call" {
+            if let Some(func_node) = node.child_by_field_name("function") {
+                let name = self.extract_call_name(func_node, source);
+                if !name.is_empty() {
+                    entry_points.push(name);
+                }
+            }
+        }
+
+        // Traverse children
+        let mut cursor = node.walk();
+        for child in node.children(&mut cursor) {
+            self.extract_calls_from_block(child, source, entry_points);
+        }
+    }
 }
 
 impl Parser for PythonParser {
@@ -194,11 +256,13 @@ impl Parser for PythonParser {
 
         let definitions = self.extract_definitions(&tree, source, &file_path_str);
         let usages = self.extract_usages(&tree, source, &file_path_str);
+        let entry_points = self.extract_entry_points(&tree, source);
 
         Ok(ParsedFile {
             path: file_path_str,
             definitions,
             usages,
+            entry_points,
         })
     }
 }
