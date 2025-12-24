@@ -3,6 +3,8 @@ members = [
     "crates/shared",
     "crates/bury",
     "crates/neural-complexity",
+    "crates/neural-conductor-shared",
+    "crates/neural-conductor-agent",
 ]
 resolver = "2"
 

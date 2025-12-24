@@ -1,0 +1,25 @@
+[package]
+name = "neural-conductor-shared"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Shared protocol and types for Neural Conductor - communication between server and agents"
+keywords = ["conductor", "agent", "protocol", "rpc", "distributed"]
+categories = ["development-tools", "network-programming"]
+readme = "README.md"
+homepage = "https://github.com/neural-garage/tools"
+documentation = "https://docs.rs/neural-conductor-shared"
+
+[dependencies]
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Error handling
+anyhow = { workspace = true }
+
+[lib]
+name = "neural_conductor_shared"
+path = "src/lib.rs"

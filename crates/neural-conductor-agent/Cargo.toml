@@ -1,0 +1,33 @@
+[package]
+name = "neural-conductor-agent"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Remote agent for Neural Conductor - executes commands on behalf of the orchestration server"
+keywords = ["conductor", "agent", "remote", "execution", "distributed"]
+categories = ["development-tools", "command-line-utilities"]
+readme = "README.md"
+homepage = "https://github.com/neural-garage/tools"
+documentation = "https://docs.rs/neural-conductor-agent"
+
+[dependencies]
+# Protocol
+neural-conductor-shared = { version = "0.1.0", path = "../neural-conductor-shared" }
+
+# CLI
+clap = { workspace = true }
+anyhow = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[lib]
+name = "neural_conductor_agent"
+path = "src/lib.rs"
+
+[[bin]]
+name = "neural-conductor-agent"
+path = "src/main.rs"
