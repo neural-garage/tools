@@ -6,6 +6,8 @@
 //! the Conductor server. It manages sessions, executes commands, and
 //! reports results back to the server.
 
+pub mod cli;
+pub mod copilot;
 pub mod executor;
 pub mod session_manager;
 
