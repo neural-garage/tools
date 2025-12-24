@@ -5,23 +5,19 @@ use crate::Result;
 use std::path::Path;
 use tree_sitter::{Node, Parser as TSParser, Tree};
 
-pub struct PythonParser {
-    parser: TSParser,
-}
+pub struct PythonParser;
 
 impl PythonParser {
     pub fn new() -> Result<Self> {
-        let mut parser = TSParser::new();
-        parser.set_language(tree_sitter_python::language())?;
-        Ok(Self { parser })
+        Ok(Self)
     }
 
     fn extract_definitions(&self, tree: &Tree, source: &str, file_path: &str) -> Vec<Symbol> {
         let mut definitions = Vec::new();
         let root = tree.root_node();
-        
+
         self.traverse_for_definitions(root, source, file_path, &mut definitions, None);
-        
+
         definitions
     }
 
@@ -34,14 +30,17 @@ impl PythonParser {
         current_class: Option<String>,
     ) {
         let kind = node.kind();
-        
+
         match kind {
             "function_definition" => {
                 // Extract function name
                 if let Some(name_node) = node.child_by_field_name("name") {
-                    let name = name_node.utf8_text(source.as_bytes()).unwrap_or("").to_string();
+                    let name = name_node
+                        .utf8_text(source.as_bytes())
+                        .unwrap_or("")
+                        .to_string();
                     let pos = name_node.start_position();
-                    
+
                     let symbol_kind = if let Some(ref class_name) = current_class {
                         SymbolKind::Method {
                             class_name: class_name.clone(),
@@ -49,7 +48,7 @@ impl PythonParser {
                     } else {
                         SymbolKind::Function
                     };
-                    
+
                     definitions.push(Symbol::new(
                         name,
                         symbol_kind,
@@ -64,9 +63,12 @@ impl PythonParser {
             "class_definition" => {
                 // Extract class name
                 if let Some(name_node) = node.child_by_field_name("name") {
-                    let name = name_node.utf8_text(source.as_bytes()).unwrap_or("").to_string();
+                    let name = name_node
+                        .utf8_text(source.as_bytes())
+                        .unwrap_or("")
+                        .to_string();
                     let pos = name_node.start_position();
-                    
+
                     definitions.push(Symbol::new(
                         name.clone(),
                         SymbolKind::Class,
@@ -76,37 +78,55 @@ impl PythonParser {
                             column: pos.column,
                         },
                     ));
-                    
+
                     // Traverse class body with class context
                     let mut cursor = node.walk();
                     for child in node.children(&mut cursor) {
-                        self.traverse_for_definitions(child, source, file_path, definitions, Some(name.clone()));
+                        self.traverse_for_definitions(
+                            child,
+                            source,
+                            file_path,
+                            definitions,
+                            Some(name.clone()),
+                        );
                     }
                     return; // Don't traverse children again below
                 }
             }
             _ => {}
         }
-        
+
         // Traverse children
         let mut cursor = node.walk();
         for child in node.children(&mut cursor) {
-            self.traverse_for_definitions(child, source, file_path, definitions, current_class.clone());
+            self.traverse_for_definitions(
+                child,
+                source,
+                file_path,
+                definitions,
+                current_class.clone(),
+            );
         }
     }
 
     fn extract_usages(&self, tree: &Tree, source: &str, file_path: &str) -> Vec<Symbol> {
         let mut usages = Vec::new();
         let root = tree.root_node();
-        
+
         self.traverse_for_usages(root, source, file_path, &mut usages);
-        
+
         usages
     }
 
-    fn traverse_for_usages(&self, node: Node, source: &str, file_path: &str, usages: &mut Vec<Symbol>) {
+    fn traverse_for_usages(
+        &self,
+        node: Node,
+        source: &str,
+        file_path: &str,
+        usages: &mut Vec<Symbol>,
+    ) {
         let kind = node.kind();
-        
+
         match kind {
             "call" => {
                 // Extract function name being called
@@ -132,7 +152,7 @@ impl PythonParser {
             }
             _ => {}
         }
-        
+
         // Traverse children
         let mut cursor = node.walk();
         for child in node.children(&mut cursor) {
@@ -146,7 +166,10 @@ impl PythonParser {
             "attribute" => {
                 // For obj.method() calls, extract the method name
                 if let Some(attr_node) = node.child_by_field_name("attribute") {
-                    attr_node.utf8_text(source.as_bytes()).unwrap_or("").to_string()
+                    attr_node
+                        .utf8_text(source.as_bytes())
+                        .unwrap_or("")
+                        .to_string()
                 } else {
                     String::new()
                 }
@@ -162,8 +185,9 @@ impl Parser for PythonParser {
         // For now, we'll create a new parser each time (not ideal but works for MVP)
         let mut parser = TSParser::new();
         parser.set_language(tree_sitter_python::language())?;
-        
-        let tree = parser.parse(source, None)
+
+        let tree = parser
+            .parse(source, None)
             .ok_or_else(|| anyhow::anyhow!("Failed to parse Python file"))?;
 
         let file_path_str = file_path.to_string_lossy().to_string();
@@ -192,7 +216,7 @@ def hello():
 "#;
         let result = parser.parse(source, Path::new("test.py"));
         assert!(result.is_ok());
-        
+
         let parsed = result.unwrap();
         assert_eq!(parsed.definitions.len(), 1);
         assert_eq!(parsed.definitions[0].name, "hello");
@@ -211,7 +235,7 @@ class Calculator:
 "#;
         let result = parser.parse(source, Path::new("test.py"));
         assert!(result.is_ok());
-        
+
         let parsed = result.unwrap();
         // Should have 1 class + 2 methods = 3 definitions
         assert_eq!(parsed.definitions.len(), 3);
@@ -230,9 +254,9 @@ def bar():
 "#;
         let result = parser.parse(source, Path::new("test.py"));
         assert!(result.is_ok());
-        
+
         let parsed = result.unwrap();
         assert_eq!(parsed.definitions.len(), 2); // foo, bar
-        assert!(parsed.usages.len() >= 1); // At least foo() call
+        assert!(!parsed.usages.is_empty()); // At least foo() call
     }
 }

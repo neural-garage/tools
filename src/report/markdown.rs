@@ -11,7 +11,7 @@ impl Reporter for MarkdownReporter {
         let mut output = String::new();
 
         output.push_str("# Dead Code Report\n\n");
-        output.push_str(&format!("## Summary\n\n"));
+        output.push_str("## Summary\n\n");
         output.push_str(&format!("- Dead code items: {}\n\n", findings.len()));
 
         if findings.is_empty() {

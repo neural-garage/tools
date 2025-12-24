@@ -56,11 +56,29 @@ mod tests {
 
     #[test]
     fn test_is_supported_file() {
-        let scanner = Scanner::new(".");
-        assert!(scanner.is_supported_file(Path::new("test.py")));
-        assert!(scanner.is_supported_file(Path::new("test.ts")));
-        assert!(scanner.is_supported_file(Path::new("test.tsx")));
-        assert!(!scanner.is_supported_file(Path::new("test.rs")));
-        assert!(!scanner.is_supported_file(Path::new("test.txt")));
+        use std::fs;
+        use tempfile::tempdir;
+
+        let dir = tempdir().unwrap();
+        let scanner = Scanner::new(dir.path());
+
+        // Create test files
+        let py_file = dir.path().join("test.py");
+        let ts_file = dir.path().join("test.ts");
+        let tsx_file = dir.path().join("test.tsx");
+        let rs_file = dir.path().join("test.rs");
+        let txt_file = dir.path().join("test.txt");
+
+        fs::write(&py_file, "").unwrap();
+        fs::write(&ts_file, "").unwrap();
+        fs::write(&tsx_file, "").unwrap();
+        fs::write(&rs_file, "").unwrap();
+        fs::write(&txt_file, "").unwrap();
+
+        assert!(scanner.is_supported_file(&py_file));
+        assert!(scanner.is_supported_file(&ts_file));
+        assert!(scanner.is_supported_file(&tsx_file));
+        assert!(!scanner.is_supported_file(&rs_file));
+        assert!(!scanner.is_supported_file(&txt_file));
     }
 }

@@ -31,9 +31,7 @@ fn run() -> bury::Result<()> {
             println!("✅ Created .bury.json");
             Ok(())
         }
-        Some(Commands::Analyze { path }) => {
-            analyze(path.as_ref().unwrap_or(&cli.path), &cli)
-        }
+        Some(Commands::Analyze { path }) => analyze(path.as_ref().unwrap_or(&cli.path), &cli),
         None => {
             // Default behavior: analyze current directory
             analyze(&cli.path, &cli)
@@ -81,8 +79,9 @@ fn analyze(analysis_path: &std::path::Path, cli: &Cli) -> bury::Result<()> {
         };
 
         if cli.verbose {
-            println!("    Found {} definitions, {} usages", 
-                parsed.definitions.len(), 
+            println!(
+                "    Found {} definitions, {} usages",
+                parsed.definitions.len(),
                 parsed.usages.len()
             );
         }

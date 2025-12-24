@@ -38,10 +38,10 @@ pub enum Commands {
         /// Path to analyze
         path: Option<PathBuf>,
     },
-    
+
     /// Initialize a .bury.json config file
     Init,
-    
+
     /// Show version information
     Version,
 }
