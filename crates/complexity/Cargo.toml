@@ -1,0 +1,30 @@
+[package]
+name = "complexity"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Code complexity analyzer for Python and TypeScript"
+keywords = ["complexity", "analyzer", "cyclomatic", "cognitive", "static-analysis"]
+categories = ["development-tools", "command-line-utilities"]
+
+[dependencies]
+# Internal shared library
+neural-shared = { path = "../shared" }
+
+# CLI
+clap = { workspace = true }
+anyhow = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[lib]
+name = "complexity"
+path = "src/lib.rs"
+
+[[bin]]
+name = "complexity"
+path = "src/main.rs"

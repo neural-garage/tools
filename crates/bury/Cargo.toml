@@ -1,0 +1,30 @@
+[package]
+name = "bury"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "A blazingly fast dead code detector for Python and TypeScript using reachability analysis"
+keywords = ["dead-code", "analyzer", "linter", "reachability", "static-analysis"]
+categories = ["development-tools", "command-line-utilities"]
+
+[dependencies]
+# Internal shared library
+neural-shared = { path = "../shared" }
+
+# CLI
+clap = { workspace = true }
+anyhow = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[lib]
+name = "bury"
+path = "src/lib.rs"
+
+[[bin]]
+name = "bury"
+path = "src/main.rs"

@@ -1,7 +1,7 @@
 use bury::cli::{Cli, Commands, OutputFormat};
-use bury::parser::{Language, PythonParser, TypeScriptParser};
-use bury::report::{JsonReporter, MarkdownReporter};
-use bury::{Analyzer, Parser, Reporter, Scanner};
+use bury::{Analyzer, Parser, Scanner};
+use neural_shared::parser::{Language, PythonParser, TypeScriptParser};
+use neural_shared::report::{JsonReporter, MarkdownReporter, Reporter};
 use std::fs;
 use std::process;
 
@@ -102,16 +102,22 @@ fn analyze(analysis_path: &std::path::Path, cli: &Cli) -> bury::Result<()> {
     }
 
     // Generate report
-    let report: Box<dyn Reporter> = match cli.format {
-        OutputFormat::Json => Box::new(JsonReporter),
-        OutputFormat::Markdown => Box::new(MarkdownReporter),
+    let output = match cli.format {
+        OutputFormat::Json => {
+            let reporter = JsonReporter;
+            reporter.report(&findings)?
+        }
+        OutputFormat::Markdown => {
+            let reporter = MarkdownReporter;
+            reporter.report(&findings)?
+        }
         OutputFormat::Terminal => {
             // For now, use Markdown for terminal
-            Box::new(MarkdownReporter)
+            let reporter = MarkdownReporter;
+            reporter.report(&findings)?
         }
     };
 
-    let output = report.report(&findings)?;
     println!("{}", output);
 
     if !findings.is_empty() && matches!(cli.format, OutputFormat::Terminal) {

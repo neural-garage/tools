@@ -1,19 +1,29 @@
-# bury 🪦
+# Neural Garage Tools 🧠🔧
 
-> A blazingly fast dead code detector using reachability analysis
+> AI-powered code analysis tools built in Rust
+
+Part of the [Neural Garage](https://github.com/neural-garage) suite of developer tools for the AI era.
+
+[![License: MIT OR Apache-2.0](https://img.shields.io/badge/License-MIT%20OR%20Apache--2.0-blue.svg)](https://opensource.org/licenses/MIT)
+[![CI](https://github.com/neural-garage/tools/workflows/CI/badge.svg)](https://github.com/neural-garage/tools/actions)
+
+## Tools
+
+This monorepo contains multiple code analysis tools:
+
+### bury 🪦 - Dead Code Detector
 
 **Bury the dead code before it haunts your codebase!**
 
-Part of the [Neural Garage](https://github.com/neural-garage) toolkit - AI-powered code analysis tools built in Rust.
+Finds unused code in your Python and TypeScript projects using reachability analysis.
 
-[![License: MIT OR Apache-2.0](https://img.shields.io/badge/License-MIT%20OR%20Apache--2.0-blue.svg)](https://opensource.org/licenses/MIT)
-[![CI](https://github.com/neural-garage/bury/workflows/CI/badge.svg)](https://github.com/neural-garage/bury/actions)
+### bury 🪦 - Dead Code Detector
 
-## What is Bury?
+**Bury the dead code before it haunts your codebase!**
 
-Bury finds unused code in your Python and TypeScript projects by performing **reachability analysis** from entry points. Unlike simple pattern matching tools, Bury builds a complete call graph and identifies code that's truly unreachable.
+Finds unused code in your Python and TypeScript projects using reachability analysis.
 
-### Key Features
+#### Key Features
 
 - 🚀 **Blazingly Fast** - Written in Rust with parallel processing
 - 🎯 **Accurate** - Uses reachability analysis, not simple pattern matching
@@ -22,19 +32,49 @@ Bury finds unused code in your Python and TypeScript projects by performing **re
 - ⚙️ **Configurable** - Define entry points and ignore patterns
 - 📊 **Multiple Output Formats** - JSON, Markdown, or terminal
 
+### complexity 📊 - Complexity Analyzer (Coming Soon)
+
+Analyzes code complexity using cyclomatic and cognitive complexity metrics.
+
+## Repository Structure
+
+This is a Cargo workspace containing multiple crates:
+
+```
+neural-garage/tools/
+├── crates/
+│   ├── shared/          # Shared library (neural-shared)
+│   │   ├── parser/      # AST parsing (tree-sitter)
+│   │   ├── scanner/     # File discovery
+│   │   └── report/      # Output generation
+│   │
+│   ├── bury/            # Dead code detector
+│   │   ├── analyzer/    # Reachability analysis
+│   │   └── cli/         # CLI interface
+│   │
+│   └── complexity/      # Complexity analyzer (WIP)
+│       └── analyzer/    # Complexity metrics
+│
+├── Cargo.toml           # Workspace configuration
+└── README.md
+```
+
 ## Installation
 
 ```bash
-# From crates.io (coming soon)
-cargo install bury
+# Install bury
+cargo install --path crates/bury
 
-# From source
-git clone https://github.com/neural-garage/bury
-cd bury
-cargo install --path .
+# Install complexity (when ready)
+cargo install --path crates/complexity
+
+# Or build all tools
+cargo build --workspace --release
 ```
 
 ## Quick Start
+
+### Using bury
 
 ```bash
 # Analyze current directory
@@ -50,7 +90,7 @@ bury --format json ./src
 bury --verbose ./src
 ```
 
-## How It Works
+## How Bury Works
 
 Bury uses a three-phase reachability analysis:
 
@@ -128,58 +168,120 @@ Create a `.bury.json` file:
 }
 ```
 
+## Development
+
+### Building
+
+```bash
+# Build all crates
+cargo build --workspace
+
+# Build specific crate
+cargo build -p bury
+cargo build -p complexity
+cargo build -p neural-shared
+
+# Run tests
+cargo test --workspace
+
+# Run clippy
+cargo clippy --workspace --all-targets
+```
+
+### Running
+
+```bash
+# Run bury
+cargo run -p bury -- --help
+cargo run -p bury -- ./src
+
+# Run complexity
+cargo run -p complexity
+```
+
 ## Roadmap
 
-### Phase 1 - MVP ✅ Complete
-- [x] Project structure
-- [x] Python parser implementation
-- [x] TypeScript parser implementation
-- [x] Reachability analysis with entry point detection
-- [x] JSON output
-- [x] CLI commands
-- [x] Call graph-based dead code detection
+### Phase 1 - Monorepo Migration ✅ Complete
+- [x] Create workspace structure
+- [x] Extract shared library (neural-shared)
+- [x] Migrate bury to workspace
+- [x] Create complexity placeholder
+- [x] Generic reporter trait
+- [x] All tests passing
 
-### Phase 2 - Enhanced Features
+### Phase 2 - Bury Enhancements
 - [ ] Configuration file support
 - [ ] Cross-file analysis
 - [ ] Import/export tracking
 - [ ] Dynamic code pattern detection
 - [ ] Performance optimization (parallel processing)
 
-### Phase 3 - Neural Garage Integration
-- [ ] Integration with `neural-complexity` analyzer
+### Phase 3 - Complexity Analyzer
+- [ ] Implement cyclomatic complexity
+- [ ] Implement cognitive complexity
+- [ ] CLI interface
+- [ ] Reporter integration
+- [ ] Documentation
+
+### Phase 4 - Conductor Platform
+- [ ] Multi-agent orchestration system (private repo)
+- [ ] Remote execution infrastructure
+- [ ] Session management
+- [ ] Dashboard and UI
+- [ ] Integration with analysis tools
 - [ ] LLM context generation
 - [ ] AI-powered refactoring suggestions
-- [ ] Unified `neural` CLI
 
-### Phase 4 - Premium Features (Separate crate)
+### Phase 5 - Premium Features
 - [ ] Additional languages (Java, Go, Rust, C#)
 - [ ] CI/CD integrations
 - [ ] Team dashboards
 - [ ] Historical tracking
 - [ ] Custom rules engine
 
-## Architecture
+## Architecture Overview
 
-```
-bury/                          # Core (Open Source - MIT/Apache-2.0)
-├── src/
-│   ├── scanner/              # File discovery
-│   ├── parser/               # AST parsing (tree-sitter)
-│   │   ├── python.rs
-│   │   └── typescript.rs
-│   ├── analyzer/             # Reachability analysis
-│   └── report/               # Output generation
-│
-bury-pro/                      # Premium features (Future)
-├── languages/                # Additional language support
-├── integrations/             # CI/CD plugins
-└── dashboard/                # Web UI
-```
+### Shared Library (neural-shared)
 
-## Why Open Core?
+The `neural-shared` crate provides common functionality for all analysis tools:
 
-Bury's core is **open source** (MIT/Apache-2.0) to:
+- **Parser Module** - Tree-sitter-based AST parsing
+  - Language detection from file extensions
+  - Pluggable parser architecture (Python, TypeScript)
+  - Symbol extraction (definitions, usages, entry points)
+
+- **Scanner Module** - File system traversal
+  - .gitignore support
+  - Parallel file scanning
+  - Language-specific file filtering
+
+- **Report Module** - Generic reporting framework
+  - `Finding` trait for all analysis results
+  - JSON and Markdown reporters
+  - Extensible for custom formats
+
+### Tool-Specific Analyzers
+
+Each tool (bury, complexity, etc.) implements its own analysis logic:
+
+- **Bury** - Reachability analysis for dead code detection
+- **Complexity** - Cyclomatic and cognitive complexity metrics (WIP)
+
+## Why a Monorepo?
+
+## Why a Monorepo?
+
+- **Code Sharing** - All tools share parser, scanner, and reporter code
+- **Consistent Versioning** - Coordinated releases across tools
+- **Easier Development** - Test changes across all tools simultaneously
+- **Better CI/CD** - Unified testing and deployment
+
+Each tool can still be:
+- Published independently to crates.io
+- Installed separately via `cargo install`
+- Used as a library in other projects
+
+## Why Open Source?
 - Build a strong community
 - Enable contributions
 - Ensure transparency
@@ -216,18 +318,18 @@ Bury was inspired by excellent tools like:
 
 ## Support
 
-- 🐛 [Report bugs](https://github.com/neural-garage/bury/issues)
-- 💡 [Request features](https://github.com/neural-garage/bury/issues)
-- 💬 [Discussions](https://github.com/neural-garage/bury/discussions)
+- 🐛 [Report bugs](https://github.com/neural-garage/tools/issues)
+- 💡 [Request features](https://github.com/neural-garage/tools/issues)
+- 💬 [Discussions](https://github.com/neural-garage/tools/discussions)
 
 ## Part of Neural Garage 🧠🔧
 
-Bury is part of the [Neural Garage](https://github.com/neural-garage) toolkit - next-generation developer tools built for the AI era.
+This toolset is part of the [Neural Garage](https://github.com/neural-garage) suite - next-generation developer tools built for the AI era.
 
-**Other Neural Garage tools:**
-- **neural-complexity** *(coming soon)* - AI-powered complexity analysis
-- **neural-context** *(coming soon)* - LLM context generator
-- **neural-inspect** *(coming soon)* - Comprehensive code health diagnostics
+**Neural Garage Ecosystem:**
+- **Analysis Tools** (this repo) - Open source CLI tools (bury, complexity, etc.)
+- **Conductor** *(private repo)* - Multi-agent orchestration platform
+- **Context Generator** *(coming soon)* - LLM context optimization
 
 ---
 

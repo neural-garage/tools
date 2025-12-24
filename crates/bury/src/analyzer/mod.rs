@@ -1,6 +1,6 @@
 //! Dead code analysis using reachability
 
-use crate::parser::{ParsedFile, Symbol};
+use neural_shared::{ParsedFile, Symbol};
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet, VecDeque};
 
@@ -144,6 +144,36 @@ pub struct DeadCodeFinding {
     pub symbol: Symbol,
     pub reason: String,
     pub confidence: Confidence,
+}
+
+impl neural_shared::report::Finding for DeadCodeFinding {
+    fn kind(&self) -> String {
+        format!("{:?}", self.symbol.kind)
+    }
+
+    fn name(&self) -> String {
+        self.symbol.name.clone()
+    }
+
+    fn file(&self) -> String {
+        self.symbol.location.file.clone()
+    }
+
+    fn line(&self) -> usize {
+        self.symbol.location.line
+    }
+
+    fn column(&self) -> usize {
+        self.symbol.location.column
+    }
+
+    fn reason(&self) -> String {
+        self.reason.clone()
+    }
+
+    fn confidence(&self) -> String {
+        format!("{:?}", self.confidence)
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
